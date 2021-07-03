@@ -1,0 +1,47 @@
+---
+title: "3. Survival analysis"
+output: html_notebook
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(survival)
+library(survminer)
+```
+
+```{r message=FALSE}
+df <- read_csv("data/csv/DIG.csv")
+```
+
+```{r}
+df2 <- df %>% 
+  mutate(TRTMT = if_else(TRTMT==1, "DIGOXIN", "PLACEBO"), 
+         DWHFMONTHS = DWHFDAYS / 30) 
+```
+
+```{r}
+df2$TRTMT <- factor(df2$TRTMT, levels = c("PLACEBO", "DIGOXIN"))
+```
+
+```{r}
+fit <- survfit(Surv(DWHFMONTHS, DWHF) ~ TRTMT, data = df2)
+
+p <- ggsurvplot(fit, fun = "event", ggtheme = theme_bw(), censor = FALSE, 
+                pval = TRUE, pval.size = 3, pval.coord = c(0,0.4), risk.table = TRUE, 
+                break.x.by = 6, ylim = c(0,0.5), fontsize = 3, 
+                legend.title = "", legend.labs = c("Placebo", "Digoxin"), 
+                xlab = "Months", ylab = "Mortality from Any Cause")
+
+p
+
+ggsave(plot = print(p), file = "03_kaplan-meier-plot.pdf", device = quartz, type = "pdf", width = 6, height = 4)
+```
+
+```{r}
+cox_fit <- coxph(Surv(DWHFMONTHS, DWHF) ~ TRTMT, data = df2)
+cox_fit
+```
+
+```{r}
+ggforest(cox_fit, data = df2)
+```
