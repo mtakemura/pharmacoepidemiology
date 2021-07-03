@@ -1,9 +1,10 @@
 # pharmacoepidemiology
-Data analysis in pharmacoepidemiology
+
+I am going to show how to analyze data and create publication-ready tables and plots in pharmacoepidemiology using R packages.
 
 ## Datasets
 
-I am going to use publicly-available datasets for the illustratative purpose.
+I am going to use publicly-available real-world datasets for the illustratative purpose.
 
 - [DIG trial](https://biolincc.nhlbi.nih.gov/teaching/)
 - [MIMIC-IV v1.0](https://physionet.org/content/mimiciv/1.0/)
